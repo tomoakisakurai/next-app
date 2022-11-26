@@ -1,3 +1,24 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:tailwindcss/recommended",
+    "plugin:import/warnings",
+    "prettier"
+  ],
+  "plugins": ["prettier"],
+  // tailwind.config.js などの config ファイル、ESLint の対象外にする
+  "ignorePatterns": [
+    "*.config.js"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
+  }
 }
