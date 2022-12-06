@@ -34,6 +34,30 @@ export default function Timestamp() {
   };
 
   useEffect(() => {
+    if (startTime !== null) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }
+  }, [startTime]);
+
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = '編集内容がリセットされます、本当にページ遷移しますか？';
+  };
+
+  // useEffect(() => {
+  //   window.addEventListener('beforeunload', function (e) {
+  //     /** 更新される直前の処理 */
+  //     console.log('beforeunload');
+  //     if (startTime !== null) {
+  //       this.window.alert('リロードOK？');
+  //     }
+  //   });
+  // });
+
+  useEffect(() => {
     const timerId = setInterval(() => {
       setTime(new Date());
     }, 1000);
