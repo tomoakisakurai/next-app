@@ -1,7 +1,14 @@
 import { Button, Typography } from '@material-tailwind/react';
 import { Layout } from 'components/layouts';
+import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
-import { getDate24Hour, getTimeDMS } from 'utils/time';
+import {
+  getTimeHHmmss,
+  getTimeDMS,
+  getTimeHHmm,
+  getDiffHHmm,
+  getMillToTimeHHmmss,
+} from 'utils/time';
 
 type RestTime = {
   start: Date | null;
@@ -14,6 +21,7 @@ export default function Timestamp() {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [restTimes, setRestTimes] = useState<RestTime[]>([]);
+  const router = useRouter();
 
   const handleBeginClick = () => {
     if (endTime !== null) {
@@ -21,7 +29,7 @@ export default function Timestamp() {
       const current = new Date();
       const duration = current.getTime() - endTime.getTime();
       console.log(duration);
-      setRestTimes([...restTimes, { start: endTime, end: current, duration: duration / 1000 }]);
+      setRestTimes([...restTimes, { start: endTime, end: current, duration: duration }]);
       setEndTime(null);
       return;
     }
@@ -33,10 +41,21 @@ export default function Timestamp() {
     setEndTime(time);
   };
 
+  const message = '編集内容がリセットされます、本当にページ遷移しますか？';
+
+  const pageChangeHandler = () => {
+    const answer = window.confirm(message);
+    if (!answer) {
+      throw 'routeChange aborted.';
+    }
+  };
+
   useEffect(() => {
     if (startTime !== null) {
+      router.events.on('routeChangeStart', pageChangeHandler);
       window.addEventListener('beforeunload', handleBeforeUnload);
       return () => {
+        router.events.off('routeChangeStart', pageChangeHandler);
         window.removeEventListener('beforeunload', handleBeforeUnload);
       };
     }
@@ -46,16 +65,6 @@ export default function Timestamp() {
     e.preventDefault();
     e.returnValue = '編集内容がリセットされます、本当にページ遷移しますか？';
   };
-
-  // useEffect(() => {
-  //   window.addEventListener('beforeunload', function (e) {
-  //     /** 更新される直前の処理 */
-  //     console.log('beforeunload');
-  //     if (startTime !== null) {
-  //       this.window.alert('リロードOK？');
-  //     }
-  //   });
-  // });
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -72,39 +81,71 @@ export default function Timestamp() {
   }, [restTimes]);
 
   const workingTimeSum = useMemo(() => {
-    if (startTime === null || endTime === null) return 0;
-    return Math.round((endTime.getTime() - startTime.getTime()) / 1000);
+    if (startTime === null || endTime === null) return '00:00:00';
+    return getDiffHHmm(endTime, startTime);
+    // return Math.round((endTime.getTime() - startTime.getTime()) / 1000);
   }, [endTime]);
+
+  const isDisabledStartButton = !!(startTime !== null && endTime === null);
+  const isDisabledEndButton = !!(startTime === null || (startTime !== null && endTime !== null));
 
   return (
     <div className='mt-20'>
       <Typography className='mb-8 text-3xl'>{time.toLocaleDateString()}</Typography>
       <Typography className='mb-8 text-3xl text-6xl' variant='h1'>
-        {getDate24Hour(time)}
+        {getTimeHHmmss(time)}
       </Typography>
-      <Button className='mr-3' variant='filled' size='lg' onClick={handleBeginClick}>
+      <Button
+        disabled={isDisabledStartButton}
+        className='mr-3'
+        variant={!isDisabledStartButton ? 'filled' : 'outlined'} //'filled'
+        color={!isDisabledStartButton ? 'blue' : 'gray'}
+        size='lg'
+        onClick={handleBeginClick}
+      >
         出勤
       </Button>
-      <Button variant='outlined' size='lg' color='gray' onClick={handleEndClick}>
+      <Button
+        disabled={isDisabledEndButton}
+        variant={!isDisabledEndButton ? 'filled' : 'outlined'}
+        size='lg'
+        color={!isDisabledEndButton ? 'blue' : 'gray'}
+        onClick={handleEndClick}
+      >
         退勤
       </Button>
 
-      <div className='pt-8 pb-20'>
-        <Typography className='block' variant='h4'>
-          出勤時刻: {startTime !== null ? `${getDate24Hour(startTime)}` : ''}
-        </Typography>
-        <Typography className='block' variant='h4'>
-          退勤時刻: {endTime !== null ? `${getDate24Hour(endTime)}` : ''}
-        </Typography>
-        <Typography className='block pt-4 pb-4' variant='h4'>
-          勤務時間: {getTimeDMS(workingTimeSum)}
-        </Typography>
-        {restTimes.length > 0 && (
-          <Typography className='block' variant='paragraph'>
-            合計休憩時間: {getTimeDMS(durationSum)}
+      <div className='flex justify-center pt-8 pb-10'>
+        <div className='px-8'>
+          <Typography className='block' variant='h4'>
+            出勤時刻
           </Typography>
-        )}
+          <Typography className='block' variant='h4'>
+            {startTime !== null ? `${getTimeHHmmss(startTime)}` : ''}
+          </Typography>
+        </div>
+        <div className='px-8'>
+          <Typography className='block' variant='h4'>
+            退勤時刻
+          </Typography>
+          <Typography className='block' variant='h4'>
+            {endTime !== null ? `${getTimeHHmmss(endTime)}` : ''}
+          </Typography>
+        </div>
+        <div className='px-8'>
+          <Typography className='block' variant='h4'>
+            勤務時間
+          </Typography>
+          <Typography className='block' variant='h4'>
+            {workingTimeSum}
+          </Typography>
+        </div>
       </div>
+      {restTimes.length > 0 && (
+        <Typography className='block' variant='paragraph'>
+          合計休憩時間: {getMillToTimeHHmmss(durationSum)}
+        </Typography>
+      )}
 
       {/* {restTimes.map((time) => {
         return (
