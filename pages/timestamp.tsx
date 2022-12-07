@@ -28,7 +28,6 @@ export default function Timestamp() {
       // 休憩開始
       const current = new Date();
       const duration = current.getTime() - endTime.getTime();
-      console.log(duration);
       setRestTimes([...restTimes, { start: endTime, end: current, duration: duration }]);
       setEndTime(null);
       return;
