@@ -6,6 +6,7 @@ import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 
 import { ThemeProvider } from '@material-tailwind/react';
+import { Meta } from 'components/layouts/Meta';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -21,6 +22,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(
     <ThemeProvider>
+      <Meta />
       <Component {...pageProps} />
     </ThemeProvider>,
   );
