@@ -1,24 +1,23 @@
 import { Button, Typography } from '@material-tailwind/react';
 import { Layout } from 'components/layouts';
-import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useMemo, useState } from 'react';
-import { dateToHHmmss, diffHHmmss, millToHHmmss } from 'utils/time';
-
-type RestTime = {
-  start: Date | null;
-  end: Date | null;
-  duration: number;
-};
+import { ReactElement, useCallback } from 'react';
+import { dateToHHmmss, millToHHmmss } from 'utils/time';
+import { useSystem } from './useSystem';
+import { useTime } from './useTime';
 
 export default function Home() {
-  const [time, setTime] = useState(new Date());
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [endTime, setEndTime] = useState<Date | null>(null);
-  const [restTimes, setRestTimes] = useState<RestTime[]>([]);
-  const router = useRouter();
-
-  const [isClient, setIsClient] = useState<boolean>(false);
-  useEffect(() => setIsClient(true), []);
+  const {
+    current,
+    startTime,
+    setStartTime,
+    endTime,
+    setEndTime,
+    restTimes,
+    setRestTimes,
+    durationSum,
+    workingTimeSum,
+  } = useTime();
+  const { isClient } = useSystem(startTime);
 
   const handleBeginClick = () => {
     if (endTime !== null) {
@@ -29,68 +28,22 @@ export default function Home() {
       setEndTime(null);
       return;
     }
-
-    setStartTime(time);
+    setStartTime(current);
   };
 
-  const handleEndClick = () => {
-    setEndTime(time);
-  };
-
-  const message = '編集内容がリセットされます、本当にページ遷移しますか？';
-
-  const pageChangeHandler = () => {
-    const answer = window.confirm(message);
-    if (!answer) {
-      throw 'routeChange aborted.';
-    }
-  };
-
-  useEffect(() => {
-    if (startTime !== null) {
-      router.events.on('routeChangeStart', pageChangeHandler);
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      return () => {
-        router.events.off('routeChangeStart', pageChangeHandler);
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-      };
-    }
-  }, [startTime]);
-
-  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-    e.preventDefault();
-    e.returnValue = '編集内容がリセットされます、本当にページ遷移しますか？';
-  };
-
-  useEffect(() => {
-    const timerId = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [time]);
-
-  const durationSum = useMemo(() => {
-    return restTimes.reduce((acc, cur) => {
-      return acc + cur.duration;
-    }, 0);
-  }, [restTimes]);
-
-  const workingTimeSum = useMemo(() => {
-    if (startTime === null || endTime === null) return '00:00:00';
-    return diffHHmmss(endTime, startTime, durationSum);
-    // return Math.round((endTime.getTime() - startTime.getTime()) / 1000);
-  }, [endTime]);
+  const handleEndClick = useCallback(() => {
+    setEndTime(current);
+  }, [current]);
 
   const isDisabledStartButton = !!(startTime !== null && endTime === null);
   const isDisabledEndButton = !!(startTime === null || (startTime !== null && endTime !== null));
 
   return (
     <div className='mt-20'>
-      <Typography className='mb-8 text-3xl'>{time.toLocaleDateString()}</Typography>
+      <Typography className='mb-8 text-3xl'>{current.toLocaleDateString()}</Typography>
       {/* suppressHydrationWarning={true} は推奨されないらしい */}
       <Typography className='mb-8 text-3xl text-6xl' variant='h1'>
-        {isClient ? dateToHHmmss(time) : ''}
+        {isClient ? dateToHHmmss(current) : ''}
       </Typography>
       <Button
         disabled={isDisabledStartButton}
