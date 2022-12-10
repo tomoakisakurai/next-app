@@ -23,6 +23,9 @@ export default function Home() {
   const [restTimes, setRestTimes] = useState<RestTime[]>([]);
   const router = useRouter();
 
+  const [isClient, setIsClient] = useState<boolean>(false);
+  useEffect(() => setIsClient(true), []);
+
   const handleBeginClick = () => {
     if (endTime !== null) {
       // 休憩開始
@@ -91,8 +94,9 @@ export default function Home() {
   return (
     <div className='mt-20'>
       <Typography className='mb-8 text-3xl'>{time.toLocaleDateString()}</Typography>
+      {/* suppressHydrationWarning={true} は推奨されないらしい */}
       <Typography className='mb-8 text-3xl text-6xl' variant='h1'>
-        {getTimeHHmmss(time)}
+        {isClient ? getTimeHHmmss(time) : ''}
       </Typography>
       <Button
         disabled={isDisabledStartButton}
