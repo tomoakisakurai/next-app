@@ -84,7 +84,7 @@ export default function Home() {
 
   const workingTimeSum = useMemo(() => {
     if (startTime === null || endTime === null) return '00:00:00';
-    return getDiffHHmm(endTime, startTime);
+    return getDiffHHmm(endTime, startTime, durationSum);
     // return Math.round((endTime.getTime() - startTime.getTime()) / 1000);
   }, [endTime]);
 

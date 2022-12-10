@@ -33,8 +33,8 @@ export const getTimeHHmm = (time: Date) => {
   return h + ':' + m;
 };
 
-export const getDiffHHmm = (t1: Date, t2: Date) => {
-  const diff = t1.getTime() - t2.getTime();
+export const getDiffHHmm = (t1: Date, t2: Date, restTime: number) => {
+  const diff = t1.getTime() - t2.getTime() - restTime;
 
   //HH部分取得
   const diffHour = diff / (1000 * 60 * 60);
