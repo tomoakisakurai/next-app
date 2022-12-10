@@ -2,13 +2,7 @@ import { Button, Typography } from '@material-tailwind/react';
 import { Layout } from 'components/layouts';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
-import {
-  getTimeHHmmss,
-  getTimeDMS,
-  getTimeHHmm,
-  getDiffHHmm,
-  getMillToTimeHHmmss,
-} from 'utils/time';
+import { dateToHHmmss, diffHHmmss, millToHHmmss } from 'utils/time';
 
 type RestTime = {
   start: Date | null;
@@ -84,7 +78,7 @@ export default function Home() {
 
   const workingTimeSum = useMemo(() => {
     if (startTime === null || endTime === null) return '00:00:00';
-    return getDiffHHmm(endTime, startTime, durationSum);
+    return diffHHmmss(endTime, startTime, durationSum);
     // return Math.round((endTime.getTime() - startTime.getTime()) / 1000);
   }, [endTime]);
 
@@ -96,7 +90,7 @@ export default function Home() {
       <Typography className='mb-8 text-3xl'>{time.toLocaleDateString()}</Typography>
       {/* suppressHydrationWarning={true} は推奨されないらしい */}
       <Typography className='mb-8 text-3xl text-6xl' variant='h1'>
-        {isClient ? getTimeHHmmss(time) : ''}
+        {isClient ? dateToHHmmss(time) : ''}
       </Typography>
       <Button
         disabled={isDisabledStartButton}
@@ -124,7 +118,7 @@ export default function Home() {
             出勤時刻
           </Typography>
           <Typography className='block' variant='h4'>
-            {startTime !== null ? `${getTimeHHmmss(startTime)}` : ''}
+            {startTime !== null ? `${dateToHHmmss(startTime)}` : ''}
           </Typography>
         </div>
         <div className='px-8'>
@@ -132,7 +126,7 @@ export default function Home() {
             退勤時刻
           </Typography>
           <Typography className='block' variant='h4'>
-            {endTime !== null ? `${getTimeHHmmss(endTime)}` : ''}
+            {endTime !== null ? `${dateToHHmmss(endTime)}` : ''}
           </Typography>
         </div>
         <div className='px-8'>
@@ -146,7 +140,7 @@ export default function Home() {
       </div>
       {restTimes.length > 0 && (
         <Typography className='block' variant='paragraph'>
-          合計休憩時間: {getMillToTimeHHmmss(durationSum)}
+          合計休憩時間: {millToHHmmss(durationSum)}
         </Typography>
       )}
 
