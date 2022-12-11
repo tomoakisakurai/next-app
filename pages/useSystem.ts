@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const MESSAGE = '編集内容がリセットされます、本当にページ遷移しますか？';
 
-export const useSystem = (startTime: Date | null) => {
+export default function useSystem(startTime: Date | null) {
   const router = useRouter();
   const [isClient, setIsClient] = useState<boolean>(false);
 
@@ -34,4 +34,4 @@ export const useSystem = (startTime: Date | null) => {
   return {
     isClient,
   };
-};
+}

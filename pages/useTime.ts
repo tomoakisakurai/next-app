@@ -7,7 +7,7 @@ type RestTime = {
   duration: number;
 };
 
-export const useTime = () => {
+export default function useTime() {
   const [time, setTime] = useState(new Date());
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
@@ -44,4 +44,4 @@ export const useTime = () => {
     durationSum,
     workingTimeSum,
   };
-};
+}
