@@ -1,9 +1,9 @@
 import { Button, Typography } from '@material-tailwind/react';
 import { Layout } from 'components/layouts';
+import { useSystem } from 'hooks/useSystem';
+import { useTime } from 'hooks/useTime';
 import { ReactElement, useCallback } from 'react';
 import { dateToHHmmss, millToHHmmss } from 'utils/time';
-import useSystem from './useSystem';
-import useTime from './useTime';
 
 export default function Home() {
   const {
