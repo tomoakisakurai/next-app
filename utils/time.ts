@@ -5,7 +5,6 @@ export const dateToHHmmss = (date: Date) => {
     date.getMinutes().toString().padStart(2, '0') +
     ':' +
     date.getSeconds().toString().padStart(2, '0');
-  console.log(h);
   return h;
 };
 
