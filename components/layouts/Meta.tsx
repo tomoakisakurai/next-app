@@ -6,6 +6,21 @@ export const Meta = () => {
       <title>勤怠くん</title>
       <meta name='robots' content='noindex' />
       <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+      <meta
+        name='description'
+        content={'ボタンを押すだけで簡単に勤務時間を計算することができます。'}
+      />
+      <meta property='og:url' content={'https://bravojp.com'} />
+      <meta property='og:title' content={'勤怠くん'} />
+      <meta property='og:site_name' content={'title'} />
+      <meta
+        property='og:description'
+        content={'ボタンを押すだけで簡単に勤務時間を計算することができます。'}
+      />
+      <meta property='og:type' content='website' />
+      {/* <meta property='og:image' content={imgUrl} />
+      <meta property='og:image:width' content={String(imgWidth)} />
+      <meta property='og:image:height' content={String(imgHeight)} /> */}
     </Head>
   );
 };
