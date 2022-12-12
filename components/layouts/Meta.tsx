@@ -8,14 +8,14 @@ export const Meta = () => {
       <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       <meta
         name='description'
-        content={'ボタンを押すだけで簡単に勤務時間を計算することができます。'}
+        content={'ボタンを押すだけで簡単に勤務時間を計算することができるよ。'}
       />
       <meta property='og:url' content={'https://bravojp.com'} />
       <meta property='og:title' content={'勤務時間計算くん'} />
       <meta property='og:site_name' content={'勤務時間計算くん'} />
       <meta
         property='og:description'
-        content={'ボタンを押すだけで簡単に勤務時間を計算することができます。'}
+        content={'ボタンを押すだけで簡単に勤務時間を計算することができるよ。'}
       />
       <meta property='og:type' content='website' />
       {/* <meta property='og:image' content={imgUrl} />
