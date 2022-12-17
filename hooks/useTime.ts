@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { diffHHmmss } from 'utils/time';
-import { event } from 'lib/ga';
 
 type RestTime = {
   start: Date | null;
@@ -20,25 +19,6 @@ export const useTime = () => {
     }, 1000);
 
     return () => clearInterval(timerId);
-  }, [time]);
-
-  const handleBeginClick = () => {
-    if (endTime !== null) {
-      // 休憩開始
-      const current = new Date();
-      const duration = current.getTime() - endTime.getTime();
-      setRestTimes([...restTimes, { start: endTime, end: current, duration: duration }]);
-      setEndTime(null);
-      event({ action: 'click', category: 'timestamp', label: '休憩開始', value: 1 });
-      return;
-    }
-    setStartTime(time);
-    event({ action: 'click', category: 'timestamp', label: '勤務開始', value: 0 });
-  };
-
-  const handleEndClick = useCallback(() => {
-    setEndTime(time);
-    event({ action: 'click', category: 'timestamp', label: '勤務終了', value: 0 });
   }, [time]);
 
   const durationSum = useMemo(() => {
@@ -63,7 +43,5 @@ export const useTime = () => {
     setRestTimes,
     durationSum,
     workingTimeSum,
-    handleBeginClick,
-    handleEndClick,
   };
 };
