@@ -2,7 +2,6 @@ import { Button, Typography } from '@material-tailwind/react';
 import { Layout } from 'components/layouts';
 import { useSystem } from 'hooks/useSystem';
 import { useTime } from 'hooks/useTime';
-import { event } from 'lib/ga';
 import { ReactElement, useCallback } from 'react';
 import { dateToHHmmss, millToHHmmss } from 'utils/time';
 
@@ -10,34 +9,14 @@ export default function Home() {
   const {
     current,
     startTime,
-    setStartTime,
     endTime,
-    setEndTime,
     restTimes,
-    setRestTimes,
     durationSum,
     workingTimeSum,
+    handleBeginClick,
+    handleEndClick,
   } = useTime();
   const { isClient } = useSystem(startTime);
-
-  const handleBeginClick = () => {
-    if (endTime !== null) {
-      // 休憩開始
-      const current = new Date();
-      const duration = current.getTime() - endTime.getTime();
-      setRestTimes([...restTimes, { start: endTime, end: current, duration: duration }]);
-      setEndTime(null);
-      event({ action: 'click', category: 'timestamp', label: '休憩開始', value: 1 });
-      return;
-    }
-    setStartTime(current);
-    event({ action: 'click', category: 'timestamp', label: '勤務開始', value: 0 });
-  };
-
-  const handleEndClick = useCallback(() => {
-    setEndTime(current);
-    event({ action: 'click', category: 'timestamp', label: '勤務終了', value: 0 });
-  }, [current]);
 
   const isDisabledStartButton = !!(startTime !== null && endTime === null);
   const isDisabledEndButton = !!(startTime === null || (startTime !== null && endTime !== null));

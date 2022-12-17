@@ -1,18 +1,29 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTime } from 'hooks/useTime';
 
 describe('useTime', () => {
-  //   it.todo('useTime');
-  it('time', () => {
+  beforeEach(() => {
+    // tell vitest we use mocked time
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    // restoring date after each test run
+    vi.useRealTimers();
+  });
+
+  it('handleBeginClick', () => {
     const { result } = renderHook(() => useTime());
 
-    const mockDate = new Date(2000, 1, 1, 12, 50);
+    const date = new Date(2000, 1, 1, 13);
+    vi.setSystemTime(date);
 
     act(() => {
-      result.current.setStartTime(mockDate);
+      result.current.handleBeginClick();
     });
 
-    expect(result.current.startTime).toBe(mockDate);
+    expect(result.current.endTime).toBe(null);
+    // expect(result.current.startTime).toEqual(vi.getMockedSystemTime());
   });
 });
