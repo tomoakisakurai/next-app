@@ -4,7 +4,7 @@ import { useSystem } from 'hooks/useSystem';
 import { useTime } from 'hooks/useTime';
 import { event } from 'lib/ga';
 import { ReactElement, useCallback } from 'react';
-import { dateToHHmmss, millToHHmmss } from 'utils/time';
+import { dateToHHmmss, dateToYYYYMMDD, millToHHmmss } from 'utils/time';
 
 export default function Home() {
   const {
@@ -44,7 +44,7 @@ export default function Home() {
 
   return (
     <div className='mt-20'>
-      <Typography className='mb-8 text-3xl'>{current.toLocaleDateString()}</Typography>
+      <Typography className='mb-8 text-3xl'>{dateToYYYYMMDD(current)}</Typography>
       {/* suppressHydrationWarning={true} は推奨されないらしい */}
       <Typography className='mb-8 text-3xl text-6xl' variant='h1'>
         {isClient ? dateToHHmmss(current) : ''}
@@ -69,8 +69,8 @@ export default function Home() {
         退勤
       </Button>
 
-      <div className='flex justify-center pt-8 pb-10'>
-        <div className='px-8'>
+      <div className='pt-8 pb-4 md:flex md:justify-center md:pb-10'>
+        <div className='py-2 px-8 md:py-0'>
           <Typography className='block' variant='h4'>
             出勤時刻
           </Typography>
@@ -78,7 +78,7 @@ export default function Home() {
             {startTime !== null ? `${dateToHHmmss(startTime)}` : ''}
           </Typography>
         </div>
-        <div className='px-8'>
+        <div className='py-2 px-8 md:py-0'>
           <Typography className='block' variant='h4'>
             退勤時刻
           </Typography>
@@ -86,7 +86,7 @@ export default function Home() {
             {endTime !== null ? `${dateToHHmmss(endTime)}` : ''}
           </Typography>
         </div>
-        <div className='px-8'>
+        <div className='py-2 px-8 md:py-0'>
           <Typography className='block' variant='h4'>
             勤務時間
           </Typography>

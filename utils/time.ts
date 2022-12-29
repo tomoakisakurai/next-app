@@ -1,3 +1,8 @@
+export const dateToYYYYMMDD = (date: Date) => {
+  const h = date.getFullYear() + '/' + `${date.getMonth() + 1}` + '/' + date.getDate();
+  return h;
+};
+
 export const dateToHHmmss = (date: Date) => {
   const h =
     date.getHours().toString().padStart(2, '0') +
