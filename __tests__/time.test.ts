@@ -1,7 +1,21 @@
-import { dateToHHmm, dateToHHmmss, diffHHmmss, millToHHmmss } from './../utils/time';
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import {
+  dateToHHmm,
+  dateToHHmmss,
+  dateToYYYYMMDD,
+  diffHHmmss,
+  millToHHmmss,
+} from './../utils/time';
+import { describe, expect, it } from 'vitest';
+
+const mockDate = new Date(2000, 1, 1, 12, 50);
 
 describe('util/time', () => {
+  it('dateToHHmmss', () => {
+    const date = dateToYYYYMMDD(mockDate);
+
+    expect(date).toBe('2000/2/1');
+  });
+
   it('dateToHHmmss', () => {
     const mockDate = new Date(2000, 1, 1, 12, 50);
     const date = dateToHHmmss(mockDate);
