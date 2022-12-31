@@ -1,5 +1,10 @@
 export const dateToYYYYMMDD = (date: Date) => {
-  const h = date.getFullYear() + '/' + `${date.getMonth() + 1}` + '/' + date.getDate();
+  const h =
+    date.getFullYear() +
+    '/' +
+    `${formatTime(date.getMonth() + 1)}` +
+    '/' +
+    formatTime(date.getDate());
   return h;
 };
 
