@@ -1,11 +1,11 @@
-import { Button, IconButton, Input, Typography } from '@material-tailwind/react';
+import { Button, Typography } from '@material-tailwind/react';
 import { Layout } from 'components/layouts';
 import { useSystem } from 'hooks/useSystem';
 import { useTime } from 'hooks/useTime';
 import { event } from 'lib/ga';
 import { ReactElement, useCallback } from 'react';
 import { dateToHHmmss, dateToYYYYMMDD, millToHHmmss } from 'utils/time';
-import { TextField, InputAdornment } from '@mui/material';
+import { TextField, InputAdornment, IconButton } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
 import { grey, lightGreen } from '@mui/material/colors';
@@ -104,7 +104,7 @@ export default function Home() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <IconButton variant='text' onClick={handleDoneStartTImeClick}>
+                      <IconButton size='small' onClick={handleDoneStartTImeClick}>
                         <CheckIcon sx={{ color: lightGreen[700] }} />
                       </IconButton>
                     </InputAdornment>
@@ -118,7 +118,7 @@ export default function Home() {
                 {startTime !== null ? `${dateToHHmmss(startTime)}` : ''}
               </Typography>
               {startTime !== null && (
-                <IconButton variant='text' onClick={handleEditStartTimeClick}>
+                <IconButton size='small' onClick={handleEditStartTimeClick}>
                   <EditIcon sx={{ color: grey[500] }} />
                 </IconButton>
               )}
@@ -140,7 +140,7 @@ export default function Home() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <IconButton variant='text' onClick={handleDoneEndTImeClick}>
+                      <IconButton size='small' onClick={handleDoneEndTImeClick}>
                         <CheckIcon sx={{ color: lightGreen[700] }} />
                       </IconButton>
                     </InputAdornment>
@@ -154,7 +154,7 @@ export default function Home() {
                 {endTime !== null ? `${dateToHHmmss(endTime)}` : ''}
               </Typography>
               {endTime !== null && (
-                <IconButton variant='text' onClick={handleEditEndTimeClick}>
+                <IconButton size='small' onClick={handleEditEndTimeClick}>
                   <EditIcon sx={{ color: grey[500] }} />
                 </IconButton>
               )}
