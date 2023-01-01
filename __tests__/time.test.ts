@@ -13,7 +13,7 @@ describe('util/time', () => {
   it('dateToHHmmss', () => {
     const date = dateToYYYYMMDD(mockDate);
 
-    expect(date).toBe('2000/2/1');
+    expect(date).toBe('2000/02/01');
   });
 
   it('dateToHHmmss', () => {
